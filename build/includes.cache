@@ -1,0 +1,22 @@
+[
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "C:\\Users\\SWSEO\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.3\\cores\\esp32"
+  },
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "C:\\Users\\SWSEO\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.3\\variants\\d32"
+  },
+  {
+    "Sourcefile": "c:\\Users\\SWSEO\\source\\GHKIM\\ESP32\\build\\sketch\\ExecutionTimes.h.cpp",
+    "Include": "ExecutionTimes.h",
+    "Includepath": "C:\\Users\\SWSEO\\Documents\\Arduino\\libraries\\ExecurionTime"
+  },
+  {
+    "Sourcefile": "c:\\Users\\SWSEO\\source\\GHKIM\\ESP32\\build\\sketch\\ExecutionTimes.h.cpp",
+    "Include": "",
+    "Includepath": null
+  }
+]

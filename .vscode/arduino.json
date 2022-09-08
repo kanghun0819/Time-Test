@@ -1,0 +1,7 @@
+{
+    "sketch": "TESTESP32.ino",
+    "output": "build",
+    "configuration": "PartitionScheme=default,FlashFreq=80,UploadSpeed=115200,DebugLevel=none",
+    "board": "esp32:esp32:d32",
+    "port": "COM12"
+}
