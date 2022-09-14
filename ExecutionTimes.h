@@ -24,10 +24,10 @@ public:
 		double	Min;
 		double	Sum;
 		double	StartTime;
-		double   EndTime;
-		double	Count;
-		double	MillCount;
+		double  EndTime;
 		double	Start;
+		long	Count;
+		long	MillCount;
 	    string 	Title;  //??
 	} EXECTIME, *PEXECTIME;
 
@@ -61,11 +61,10 @@ public:
 		//??QueryPerformanceCounter(&et.Start);
 	}
 
-	double End(int nID)
+	void End(int nID, double *Last, double *Avg, double *Max, double *Min, int *mcnt)
 	{
 		
 		EXECTIME& et = m_vExecTime[nID-1];
-		String title;
 		//std::string title = et.Title;
 		et.EndTime = micros();
 		et.EndTime = (double)(et.EndTime-et.StartTime)/1000000;
@@ -78,31 +77,15 @@ public:
 		if (et.EndTime < et.Min) et.Min = et.EndTime;
 		et.Count++;
 		et.Sum += et.EndTime;
-		if (et.Count == 10)
-		{
-			//Serial.print("Title\t");
-			Serial.print("Last\t");
-			Serial.print("Average\t");
-			Serial.print("Min\t");
-			Serial.print("Max\t");
-			Serial.print("Count\t");
-			Serial.print("M C\t");
-			Serial.print("\n");
-			//Serial.print(title);
-			//Serial.print("\t");
-			Serial.print(et.EndTime);
-			Serial.print("\t");
-			Serial.print(et.Sum/et.Count);
-			Serial.print("\t");
-			Serial.print(et.Min);
-			Serial.print("\t");
-			Serial.print(et.Max);
-			Serial.print("\t");
-			Serial.print(et.MillCount);
-			Serial.print("\n");
-			et.Count = 0;
-		}
-		return et.EndTime;
+		
+		
+		*Last = et.EndTime;
+		*Avg = et.Sum/et.Count;
+		*Max = et.Max;
+		*Min = et.Min;
+		//*cnt = et.Count;
+		*mcnt = et.MillCount;
+		//return et.EndTime;
 	
 
 	}

@@ -1,7 +1,7 @@
 #include <Arduino.h>
-#line 11 "c:\\Users\\SWSEO\\source\\GHKIM\\ESP32\\TESTESP32.ino"
+#line 22 "c:\\Users\\SWSEO\\source\\GHKIM\\ESP32\\TESTESP32.ino"
 void setup();
-#line 21 "c:\\Users\\SWSEO\\source\\GHKIM\\ESP32\\TESTESP32.ino"
+#line 38 "c:\\Users\\SWSEO\\source\\GHKIM\\ESP32\\TESTESP32.ino"
 void loop();
 #line 0 "c:\\Users\\SWSEO\\source\\GHKIM\\ESP32\\TESTESP32.ino"
 #line 1 "c:\\Users\\SWSEO\\source\\GHKIM\\ESP32\\ExecutionTimes.h"
@@ -31,10 +31,10 @@ public:
 		double	Min;
 		double	Sum;
 		double	StartTime;
-		double   EndTime;
-		double	Count;
-		double	MillCount;
+		double  EndTime;
 		double	Start;
+		long	Count;
+		long	MillCount;
 	    string 	Title;  //??
 	} EXECTIME, *PEXECTIME;
 
@@ -68,11 +68,10 @@ public:
 		//??QueryPerformanceCounter(&et.Start);
 	}
 
-	double End(int nID)
+	void End(int nID, double *Last, double *Avg, double *Max, double *Min, int *mcnt)
 	{
 		
 		EXECTIME& et = m_vExecTime[nID-1];
-		String title;
 		//std::string title = et.Title;
 		et.EndTime = micros();
 		et.EndTime = (double)(et.EndTime-et.StartTime)/1000000;
@@ -85,31 +84,15 @@ public:
 		if (et.EndTime < et.Min) et.Min = et.EndTime;
 		et.Count++;
 		et.Sum += et.EndTime;
-		if (et.Count == 10)
-		{
-			//Serial.print("Title\t");
-			Serial.print("Last\t");
-			Serial.print("Average\t");
-			Serial.print("Min\t");
-			Serial.print("Max\t");
-			Serial.print("Count\t");
-			Serial.print("M C\t");
-			Serial.print("\n");
-			//Serial.print(title);
-			//Serial.print("\t");
-			Serial.print(et.EndTime);
-			Serial.print("\t");
-			Serial.print(et.Sum/et.Count);
-			Serial.print("\t");
-			Serial.print(et.Min);
-			Serial.print("\t");
-			Serial.print(et.Max);
-			Serial.print("\t");
-			Serial.print(et.MillCount);
-			Serial.print("\n");
-			et.Count = 0;
-		}
-		return et.EndTime;
+		
+		
+		*Last = et.EndTime;
+		*Avg = et.Sum/et.Count;
+		*Max = et.Max;
+		*Min = et.Min;
+		//*cnt = et.Count;
+		*mcnt = et.MillCount;
+		//return et.EndTime;
 	
 
 	}
@@ -170,9 +153,20 @@ protected:
 CExecutionTimes g_ets;
 short g_id1;
 short g_id2;
+
 long g_count;
 int g_cnt1;
 int g_cnt2;
+
+
+double g_avg[2];
+double g_max[2];
+double g_min[2];
+double g_last[2];
+int g_mc[2];
+
+int g_temp;
+
 void setup()
 {
 	Serial.begin(115200);
@@ -180,26 +174,62 @@ void setup()
     g_id2 = g_ets.Add("2ST Time");
     g_count = 0;
     g_cnt2=0;
-   
+    Serial.print("Last\t");
+	Serial.print("Average\t");
+	Serial.print("Min\t");
+	Serial.print("Max\t");
+	Serial.print("Count\t");
+	Serial.print("M C\t");
+	Serial.print("\n");
 }
 
 void loop()
 {   
+
+    g_count++;
     g_ets.Begin(g_id1);
         delay(1000);
-    g_ets.End(g_id1);
-    //Serial.print(g_id2);
+    g_ets.End(g_id1, &g_last[0], &g_avg[0], &g_max[0], &g_min[0], &g_mc[0]);
+    
+    Serial.print(g_id1);
+    Serial.print("\t");
+    Serial.print(g_last[0]);
+    Serial.print("\t");
+    Serial.print(g_avg[0]);
+    Serial.print("\t");
+    Serial.print(g_max[0]);
+    Serial.print("\t");
+    Serial.print(g_min[0]);
+    Serial.print("\t");
+    Serial.print(g_mc[0]);
+    Serial.println();
+    
+  
+    
 
     g_ets.Begin(g_id2);
         double sum = 0;
-        g_cnt2 = g_cnt2+1;
-        Serial.println(g_cnt2);
-        for (int i=0; i<10000; ++i)
+        for (int i=0; i<1000000; ++i)
         {
-            sum += (double)i;
-            
+            sum += (double)(rand()%10);            
         }
-    (g_ets.End(g_id2));
+    g_ets.End(g_id2, &g_last[1], &g_avg[1], &g_max[1], &g_min[1], &g_mc[1]);
+
+    Serial.print(g_id2);
+    Serial.print("\t");
+    Serial.print(g_last[1]);
+    Serial.print("\t");
+    Serial.print(g_avg[1]);
+    Serial.print("\t");
+    Serial.print(g_max[1]);
+    Serial.print("\t");
+    Serial.print(g_min[1]);
+    Serial.print("\t");
+    Serial.print(g_mc[1]);
+    Serial.print("\t");
+    Serial.print(sum);
+    Serial.println();
+
 
   
 }
